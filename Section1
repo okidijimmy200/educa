@@ -1,0 +1,84 @@
+Course Introduction:
+In this chapter, you will learn how to:
+• Create fixtures for your models
+• Use model inheritance
+• Create custom model fields
+• Use class-based views and mixins
+• Build formsets
+• Manage groups and permissions
+• Create a CMS
+
+Lecture 1:
+Building the course models
+--be divided into a configurable number of modules, and each module will contain
+a configurable number of contents. The contents will be of various types: text, file,
+image, or video
+
+Data structure of course;
+Subject 1
+Course 1
+Module 1
+Content 1 (image)
+Content 2 (text)
+Module 2
+Content 3 (text)
+Content 4 (file)
+Content 5 (video)
+
+--Each course is divided into several modules. Therefore, the Module model contains
+a ForeignKey field that points to the Course model.
+
+***********python manage.py makemigrations**********8
+
+******python manage.py migrate*******88
+
+Registering the models in the administration site:
+
+--register courses in the administration
+
+Using fixtures to provide initial data for models:
+--Sometimes, you might want to prepopulate your database with hardcoded data.
+This is useful for automatically including initial data in the project setup, instead of
+having to add it manually. Django comes with a simple way to load and dump data
+from the database into files that are called fixtures.
+
+--we will create fixture to include several initial subject offers.
+
+*******python manage.py createsuperuser*********8
+
+*******python manage.py runserver*********8
+
+
+Run the following command from the shell:
+****************python manage.py dumpdata courses --indent=2**********
+
+--The dumpdata command dumps data from the database into the standard
+output, serialized in JSON format by default. The resulting data structure
+includes information about the model and its fields for Django to be able
+to load it into the database
+
+--You can limit the output to the models of an application by providing the application
+names to the command, or specifying single models for outputting data using the
+app.Model format
+
+--You can also specify the format using the --format flag. By
+default, dumpdata outputs the serialized data to the standard output.
+
+--Save this dump to a fixtures file in a new fixtures/ directory in the courses
+application using the following commands:
+
+***********mkdir courses/fixtures************8
+************python manage.py dumpdata courses --indent=2 --output=courses/fixtures/subjects.json*******88
+
+--Run the development server and use the administration site to remove the subjects
+you created. Then, load the fixture into the database using the following command
+
+******python manage.py loaddata subjects.json************
+
+--All Subject objects included in the fixture are loaded into the database.
+
+NB:
+Fixtures are not only useful for setting up initial data, but also for
+providing sample data for your application or data required for
+your tests.
+
