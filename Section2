@@ -63,3 +63,45 @@ all permissions.
 http://127.0.0.1:8000/accounts/login/?next=/course/mine/
 --log in with a user belonging to the Instructors group. After logging
 in, you will be redirected to the http://127.0.0.1:8000/course/mine/ URL
+
+
+
+Lecture 3:
+Managing course modules and their contents:::
+You are going to build a system to manage course modules and their contents. You
+will need to build forms that can be used for managing multiple modules per course
+and different types of content for each module.
+
+Using formsets for course modules::
+--Django comes with an abstraction layer to work with multiple forms on the same
+page. These groups of forms are known as formsets. Formsets manage multiple
+instances of a certain Form or ModelForm. All forms are submitted at once and the
+formset takes care of the initial number of forms to display, limiting the maximum
+number of forms that can be submitted and validating all the forms
+
+--Formsets include an is_valid() method to validate all forms at once. You can also
+provide initial data for the forms and specify how many additional empty forms to
+display.
+
+--Open http://127.0.0.1:8000/course/mine/ in your browser. Create a course
+and click the Edit modules link for it
+
+---The formset includes a form for each Module object contained in the course.
+After these, two empty extra forms are displayed because you set extra=2 for
+ModuleFormSet. When you save the formset, Django will include another two
+extra fields to add new modules.
+
+Adding content to course modules::
+--create a view that handles creating or updating
+the objects of any content model.
+
+--Run the development server, open http://127.0.0.1:8000/course/mine/, click
+Edit modules for an existing course, and create a module
+
+*****python manage.py shell************
+>>> from courses.models import Module
+>>> Module.objects.latest('id').id
+4
+--Run the development server and open http://127.0.0.1:8000/course/module/6/
+content/image/create/ in your browser, replacing the module ID with the one you
+obtained before

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+<!-- template for the ContentCreateUpdateView view -->
+{% block title %}
+  {% if object %}
+    Edit content "{{ object.title }}"
+  {% else %}
+    Add new content
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <h1>
+      <!-- you
+check whether an object variable is in the context. If object exists in the context,
+you are updating an existing object. Otherwise, you are creating a new object. -->
+    {% if object %}
+      Edit content "{{ object.title }}"
+    {% else %}
+      Add new content
+    {% endif %}
+  </h1>
+  <div class="module">
+    <h2>Course info</h2>
+    <!-- You include enctype=multipart/form-data in the form HTML element
+because the form contains a file upload for the File and Image content models. -->
+    <form method="post" enctype="multipart/form-data">
+      {{ form.as_p }}
+      {% csrf_token %}
+      <p><input type="submit" value="Save content"></p>
+    </form>
+  </div>
+{% endblock %}

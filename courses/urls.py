@@ -18,17 +18,20 @@ urlpatterns = [
          views.CourseDeleteView.as_view(),
          name='course_delete'),
          
-    # path('<pk>/module/',
-    #  views.CourseModuleUpdateView.as_view(),
-    #  name='course_module_update'),
+    path('<pk>/module/',
+     views.CourseModuleUpdateView.as_view(),
+     name='course_module_update'),
 
-    # path('module/<int:module_id>/content/<model_name>/create/',
-    #      views.ContentCreateUpdateView.as_view(),
-    #      name='module_content_create'),
-
-    # path('module/<int:module_id>/content/<model_name>/<id>/',
-    #      views.ContentCreateUpdateView.as_view(),
-    #      name='module_content_update'),
+# module_content_create: To create new text, video, image, or file objects and add them to a module. It includes the module_id and model_name
+# parameters. The first one allows linking the new content object to the given module. The latter specifies the content model to build the form for.
+    path('module/<int:module_id>/content/<model_name>/create/',
+         views.ContentCreateUpdateView.as_view(),
+         name='module_content_create'),
+# module_content_update: To update an existing text, video, image, or file object. It includes the module_id and model_name parameters and an id
+# parameter to identify the content that is being updated
+    path('module/<int:module_id>/content/<model_name>/<id>/',
+         views.ContentCreateUpdateView.as_view(),
+         name='module_content_update'),
 
     # path('content/<int:id>/delete/',
     #      views.ContentDeleteView.as_view(),
