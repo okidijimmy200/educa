@@ -14,3 +14,10 @@ Displaying courses
 • List all available courses, optionally filtered by subject
 • Display a single course overview.
 
+Lecture 3:
+Adding student registration::
+**********python manage.py startapp students***********
+
+Creating a student registration view::
+
+
