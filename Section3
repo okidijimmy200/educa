@@ -1,0 +1,19 @@
+Reordering modules and their contents::
+--You need to provide a simple way to reorder course modules and their contents. You
+will use a JavaScript drag-and-drop widget to let your users reorder the modules of
+a course by dragging them. When users finish dragging a module, you will launch
+an asynchronous request (AJAX) to store the new module order
+
+Using mixins from django-braces::
+--django-braces is a third-party module that contains a collection of generic mixins
+for Django. These mixins provide additional features for class-based views
+
+You will use the following mixins of django-braces:
+• CsrfExemptMixin: Used to avoid checking the cross-site request forgery
+(CSRF) token in the POST requests. You need this to perform AJAX POST
+requests without having to generate a csrf_token.
+• JsonRequestResponseMixin: Parses the request data as JSON and also
+serializes the response as JSON and returns an HTTP response with the
+application/json content type.
+
+*******pip install django-braces==1.14.0***********

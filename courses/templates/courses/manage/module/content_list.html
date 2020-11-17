@@ -76,15 +76,25 @@ Image, or File. You need the model name to build the URL to edit the object -->
 {% endblock %}
 
 {% block domready %}
+//You define a sortable element for the modules HTML element. Remember that you use #modules, since jQuery uses CSS notation for selectors.
   $('#modules').sortable({
+//You specify a function for the stop event. This event is triggered every time the user finishes sorting an element.
       stop: function(event, ui) {
+//You create an empty modules_order dictionary. The keys for this dictionary will be the module IDs, and the values will be the assigned order for each module
           modules_order = {};
           $('#modules').children().each(function(){
               // update the order field
+/*You iterate over the #module children elements. You recalculate the
+displayed order for each module and get its data-id attribute, which
+contains the module's ID. You add the ID as the key of the modules_order
+dictionary and the new index of the module as the value.*/
               $(this).find('.order').text($(this).index() + 1);
               // associate the module's id with its order
               modules_order[$(this).data('id')] = $(this).index();
           });
+/*You launch an AJAX POST request to the content_order URL, including the
+serialized JSON data of modules_order in the request. The corresponding
+ModuleOrderView takes care of updating the order of the modules.*/
           $.ajax({
               type: 'POST',
               url: '{% url "module_order" %}',
