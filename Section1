@@ -82,3 +82,49 @@ Fixtures are not only useful for setting up initial data, but also for
 providing sample data for your application or data required for
 your tests.
 
+
+Lecture 2:
+Creating models for diverse content::
+--You plan to add different types of content to the course modules, such as text,
+images, files, and videos. Therefore, you need a versatile data model that allows
+you to store diverse content
+
+--You are going to create a Content model that represents the
+modules' contents, and define a generic relation to associate any kind of content.
+--You are going to use a different model for each type of content. Your content models
+will have some common fields, but they will differ in the actual data they can store.
+
+Using model inheritance:;
+--Django supports model inheritance. It works in a similar way to standard class
+inheritance in Python.
+
+it works in the 3 ways;
+• Abstract models: Useful when you want to put some common information
+into several models.
+• Multi-table model inheritance: Applicable when each model in the
+hierarchy is considered a complete model by itself.
+• Proxy models: Useful when you need to change the behavior of a model,
+for example, by including additional methods, changing the default manager,
+or using different meta options.
+
+Abstract models::
+--An abstract model is a base class in which you define fields you want to include
+in all child models. Django doesn't create any database tables for abstract models.
+A database table is created for each child model, including the fields inherited from
+the abstract class and the ones defined in the child model.
+
+--To mark a model as abstract, you need to include abstract=True in its Meta class.
+--To create child models, you just need to subclass the abstract model.
+
+Multi-table model inheritance::
+--In multi-table inheritance, each model corresponds to a database table. Django
+creates a OneToOneField field for the relationship between the child model and its
+parent model. To use multi-table inheritance, you have to subclass an existing model.
+
+Proxy models::
+--A proxy model changes the behavior of a model. Both models operate on the
+database table of the original model. To create a proxy model, add proxy=True to
+the Meta class of the model
+--here both parent and child models operate on the same database table created.
+
+

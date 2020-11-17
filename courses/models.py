@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+# You are going to create a Content model that represents the modules' contents, and define a generic relation to associate any kind of content.
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 # from .fields import OrderField
@@ -55,49 +56,57 @@ class Module(models.Model):
     # class Meta:
     #     ordering = ['order']
 
+# You are going to create a Content model that represents the modules' contents, and define a generic relation to associate any kind of content.
+class Content(models.Model):
+# A module contains multiple contents, so you define a ForeignKey field that points to the Module model
+    module = models.ForeignKey(Module,
+                               related_name='contents',
+                               on_delete=models.CASCADE)
+# content_type: A ForeignKey field to the ContentType model
+    content_type = models.ForeignKey(ContentType,
+                                     on_delete=models.CASCADE,
+                                     limit_choices_to={'model__in':(
+                                     'text',
+                                     'video',
+                                     'image',
+                                     'file')})
+# object_id: A PositiveIntegerField to store the primary key of the related object
+    object_id = models.PositiveIntegerField()
+# set up a generic relation to associate objects from different models that represent different types of content
+# item: A GenericForeignKey field to the related object combining the two previous fields
+    item = GenericForeignKey('content_type', 'object_id')
+    order = OrderField(blank=True, for_fields=['module'])
 
-# class Content(models.Model):
-#     module = models.ForeignKey(Module,
-#                                related_name='contents',
-#                                on_delete=models.CASCADE)
-#     content_type = models.ForeignKey(ContentType,
-#                                      on_delete=models.CASCADE,
-#                                      limit_choices_to={'model__in':(
-#                                      'text',
-#                                      'video',
-#                                      'image',
-#                                      'file')})
-#     object_id = models.PositiveIntegerField()
-#     item = GenericForeignKey('content_type', 'object_id')
-#     order = OrderField(blank=True, for_fields=['module'])
-
-#     class Meta:
-#         ordering = ['order']
+'''Only the content_type and object_id fields have a corresponding column in the
+database table of this model. The item field allows you to retrieve or set the related
+object directly, and its functionality is built on top of the other two fields.'''
+    class Meta:
+        ordering = ['order']
 
 
 
-# class ItemBase(models.Model):
-#     owner = models.ForeignKey(User,
-#                               related_name='%(class)s_related',
-#                               on_delete=models.CASCADE)
-#     title = models.CharField(max_length=250)
-#     created = models.DateTimeField(auto_now_add=True)
-#     updated = models.DateTimeField(auto_now=True)
+class ItemBase(models.Model):
+    owner = models.ForeignKey(User,
+                              related_name='%(class)s_related',
+                              on_delete=models.CASCADE)
+    title = models.CharField(max_length=250)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
-#     class Meta:
-#         abstract = True
+    class Meta:
+        abstract = True
 
-#     def __str__(self):
-#         return self.title
+    def __str__(self):
+        return self.title
 
-# class Text(ItemBase):
-#     content = models.TextField()
+class Text(ItemBase):
+    content = models.TextField()
 
-# class File(ItemBase):
-#     file = models.FileField(upload_to='files')
+class File(ItemBase):
+    file = models.FileField(upload_to='files')
 
-# class Image(ItemBase):
-#        file = models.FileField(upload_to='images')
+class Image(ItemBase):
+       file = models.FileField(upload_to='images')
 
-# class Video(ItemBase):
-#     url = models.URLField()
+class Video(ItemBase):
+    url = models.URLField()
