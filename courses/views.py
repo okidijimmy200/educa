@@ -8,8 +8,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin, \
                                        PermissionRequiredMixin
 from django.forms.models import modelform_factory
 from django.apps import apps
+from django.db.models import Count
+from django.core.cache import cache
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
-from .models import Course, Module, Content
+from .models import Course, Module, Content, Subject
+from django.views.generic.detail import DetailView
 from .forms import ModuleFormSet
 
 class ManageCourseListView(ListView):
@@ -218,3 +221,48 @@ class ContentOrderView(CsrfExemptMixin,
                        module__course__owner=request.user) \
                        .update(order=order)
         return self.render_json_response({'saved': 'OK'})
+
+# CourseListView view. It inherits from TemplateResponseMixin and View.
+class CourseListView(TemplateResponseMixin, View):
+    model = Course
+    template_name = 'courses/course/list.html'
+
+    def get(self, request, subject=None):
+        subjects = cache.get('all_subjects')
+        if not subjects:
+# You retrieve all subjects, using the ORM's annotate() method with the Count() aggregation function to include the total number of courses for each subject
+            subjects = Subject.objects.annotate(
+                            total_courses=Count('courses'))
+            cache.set('all_subjects', subjects)
+# You retrieve all available courses, including the total number of modules contained in each course
+        all_courses = Course.objects.annotate(
+                           total_modules=Count('modules'))
+        if subject:
+# If a subject slug URL parameter is given, you retrieve the corresponding subject object and limit the query to the courses that belong to the given subject
+            subject = get_object_or_404(Subject, slug=subject)
+            key = f'subject_{subject.id}_courses'
+            courses = cache.get(key)
+            if not courses:
+                courses = all_courses.filter(subject=subject)
+                cache.set(key, courses)
+        else:
+            courses = cache.get('all_courses')
+            if not courses:
+                courses = all_courses
+                cache.set('all_courses', courses)
+# You use the render_to_response() method provided by TemplateResponseMixin to render the objects to a template and return an HTTP response
+        return self.render_to_response({'subjects': subjects,
+                                        'subject': subject,
+                                        'courses': courses})
+
+
+# view inherits from the generic DetailView provided by Django. You specify the model and template_name attributes.
+class CourseDetailView(DetailView):
+    model = Course
+    template_name = 'courses/course/detail.html'
+# DetailView expects a primary key (pk) or slug URL parameter to retrieve a single object for the given model.
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['enroll_form'] = CourseEnrollForm(
+    #                                initial={'course':self.object})
+    #     return context

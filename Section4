@@ -1,0 +1,16 @@
+Rendering and Caching Content
+you will:
+• Create public views for displaying course information
+• Build a student registration system
+• Manage student enrollment onto courses
+• Render diverse content for course modules
+• Install and configure Memcached
+• Cache content using the Django cache framework
+• Monitor Memcached using the django-memcache-status
+
+Lecture 1:
+Displaying courses
+--For your course catalog, you have to build the following functionalities:
+• List all available courses, optionally filtered by subject
+• Display a single course overview.
+
