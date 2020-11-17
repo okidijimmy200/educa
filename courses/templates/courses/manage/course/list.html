@@ -15,10 +15,13 @@ list the courses created by the current user -->
           <a href="{% url "course_edit" course.id %}">Edit</a>
           <a href="{% url "course_delete" course.id %}">Delete</a>
          <a href="{% url "course_module_update" course.id %}">Edit modules</a>
-         <!-- {% comment %}{% if course.modules.count > 0 %}
+         <!-- using templatetags -->
+         {% if course.modules.count > 0 %}
+         <!-- new link allows users to access the contents of the first module of the course,
+if there are any -->
             <a href="{% url "module_content_list" course.modules.first.id %}">
             Manage contents</a>
-          {% endif %}{% endcomment %}. -->
+          {% endif %}
         </p>
       </div>
     {% empty %}

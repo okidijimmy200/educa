@@ -174,27 +174,29 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
         return self.render_to_response({'form': form,
                                         'object': self.obj})
 
+# ContentDeleteView class retrieves the Content object with the given ID.
+class ContentDeleteView(View):
+    # It deletes the related Text, Video, Image, or File object.
+    def post(self, request, id):
+        content = get_object_or_404(Content,
+                                    id=id,
+                                    module__course__owner=request.user)
+        module = content.module
+        content.item.delete()
+        content.delete()
+# it deletes the Content object and redirects the user to the module_content_list URL to list the other contents of the module.
+        return redirect('module_content_list', module.id)
 
-# class ContentDeleteView(View):
-#     def post(self, request, id):
-#         content = get_object_or_404(Content,
-#                                     id=id,
-#                                     module__course__owner=request.user)
-#         module = content.module
-#         content.item.delete()
-#         content.delete()
-#         return redirect('module_content_list', module.id)
+# ModuleContentListView view. This view gets the Module object with the given ID that belongs to the current user and renders a template with the given module
+class ModuleContentListView(TemplateResponseMixin, View):
+    template_name = 'courses/manage/module/content_list.html'
 
+    def get(self, request, module_id):
+        module = get_object_or_404(Module,
+                                   id=module_id,
+                                   course__owner=request.user)
 
-# class ModuleContentListView(TemplateResponseMixin, View):
-#     template_name = 'courses/manage/module/content_list.html'
-
-#     def get(self, request, module_id):
-#         module = get_object_or_404(Module,
-#                                    id=module_id,
-#                                    course__owner=request.user)
-
-#         return self.render_to_response({'module': module})
+        return self.render_to_response({'module': module})
 
 
 # class ModuleOrderView(CsrfExemptMixin,

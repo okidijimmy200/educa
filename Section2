@@ -105,3 +105,22 @@ Edit modules for an existing course, and create a module
 --Run the development server and open http://127.0.0.1:8000/course/module/6/
 content/image/create/ in your browser, replacing the module ID with the one you
 obtained before
+
+Lecture 4:
+View for Deleting Content:
+--create a ContentDeleteView to delete a particular item.
+
+Managing modules and their contents::
+--You have built views to create, edit, and delete course modules and their contents.
+Next, you need a view to display all modules for a course and list the contents of
+a specific module.
+
+--you could display each item in the template differently based on the type of
+content it is.
+--we will use a template filter.
+--Stop the development server and run it again using the command python manage.
+py runserver. By stopping and running the development server, you make sure
+that the course template tags file gets loaded.
+
+--Open http://127.0.0.1:8000/course/mine/ and click the Manage contents
+link for a course that contains at least one module.
