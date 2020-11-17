@@ -127,4 +127,36 @@ database table of the original model. To create a proxy model, add proxy=True to
 the Meta class of the model
 --here both parent and child models operate on the same database table created.
 
+Lecture 3:
+Creating the content models::
+--The Content model of your courses application contains a generic relation to
+associate different types of content with it. You will create a different model for each
+type of content. All content models will have some fields in common and additional
+fields to store custom data
+--A database table will be created for the Text, File, Image, and Video
+models, respectively. There will be no database table associated with the ItemBase
+model, since it is an abstract model
+
+**********python manage.py makemigrations**********
+
+*********python manage.py migrate***********
+
+Creating custom model fields::
+--your own model fields to store custom data or alter the behavior of existing fields.
+--You need a field that allows you to define an order for objects. An easy way
+to specify an order for objects using existing Django fields is by adding a
+PositiveIntegerField to your models. Using integers, you can easily specify
+the order of objects. You can create a custom order field that inherits from
+PositiveIntegerField and provides additional behavior.
+
+There are two relevant functionalities that you will build into your order field:
+• Automatically assign an order value when no specific order is provided:
+When saving a new object with no specific order, your field should
+automatically assign the number that comes after the last existing ordered
+object. If there are two objects with order 1 and 2 respectively, when saving
+a third object, you should automatically assign the order 3 to it if no specific
+order has been provided
+• Order objects with respect to other fields: Course modules will be ordered
+with respect to the course they belong to and module contents with respect
+to the module they belong to
 
