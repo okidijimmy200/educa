@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 # You are going to create a Content model that represents the modules' contents, and define a generic relation to associate any kind of content.
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
-# from .fields import OrderField
+from .fields import OrderField
 
 
 class Subject(models.Model):
@@ -48,13 +48,15 @@ class Module(models.Model):
                                on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    # order = OrderField(blank=True, for_fields=['course'])
+# specify that the ordering is calculated with respect to the course by setting for_fields=['course']. This means that the
+# order for a new module will be assigned by adding 1 to the last module of the same Course object.
+    order = OrderField(blank=True, for_fields=['course'])
 
     def __str__(self):
         return f'{self.order}. {self.title}'
 
-    # class Meta:
-    #     ordering = ['order']
+    class Meta:
+        ordering = ['order']
 
 # You are going to create a Content model that represents the modules' contents, and define a generic relation to associate any kind of content.
 class Content(models.Model):
@@ -77,12 +79,12 @@ class Content(models.Model):
 # set up a generic relation to associate objects from different models that represent different types of content
 # item: A GenericForeignKey field to the related object combining the two previous fields
     item = GenericForeignKey('content_type', 'object_id')
-    # order = OrderField(blank=True, for_fields=['module'])
+    order = OrderField(blank=True, for_fields=['module'])
 
 # Only the content_type and object_id fields have a corresponding column in the database table of this model. The item field allows you to retrieve or set the related
 # object directly, and its functionality is built on top of the other two fields.
-    # class Meta:
-    #     ordering = ['order']
+    class Meta:
+        ordering = ['order']
 
 
 # abstract model that provides the common fields for all content models.

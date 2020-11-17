@@ -160,3 +160,47 @@ order has been provided
 with respect to the course they belong to and module contents with respect
 to the module they belong to
 
+
+Lecture 4:
+Adding ordering to module and content objects
+--add order to model
+*******python manage.py makemigrations courses***********8
+
+--for migrations issues, check pg 375
+
+******python manage.py migrate********
+
+****python manage.py shell**********8
+--create new course
+>>> from django.contrib.auth.models import User
+>>> from courses.models import Subject, Course, Module
+>>> user = User.objects.last()
+>>> subject = Subject.objects.last()
+>>> c1 = Course.objects.create(subject=subject, owner=user, title='Course1', slug='course1')
+
+You have created a course in the database. Now, you will add modules to the course
+and see how their order is automatically calculated.
+
+>>> m1 = Module.objects.create(course=c1, title='Module 1')
+>>> m1.order
+0
+
+--OrderField sets its value to 0, since this is the first Module object created for the
+given course
+>>> m2 = Module.objects.create(course=c1, title='Module 2')
+>>> m2.order
+1
+
+-If you specify a custom order, the OrderField field does not interfere and the value
+given to order is used
+>>> m3 = Module.objects.create(course=c1, title='Module 3', order=5)
+>>> m3.order
+5
+
+--The order for this module has been automatically set. Your OrderField field does
+not guarantee that all order values are consecutive. However, it respects existing
+order values and always assigns the next order based on the highest existing order.
+--To calculate the new module's order, the field only takes into consideration
+existing modules that belong to the same course. Since this is the first module
+of the second course, the resulting order is 0. This is because you specified for_
+fields=['course'] in the order field of the Module model.
