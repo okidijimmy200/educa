@@ -14,3 +14,52 @@ able to log in to the site using the authentication views of django.contrib.auth
 
 Creating the authentication templates::
 --open http://127.0.0.1:8000/accounts/login/
+
+Lecture 2:
+Creating class-based views
+--You are going to build views to create, edit, and delete courses. You will use classbased
+views for this.
+--When you need to provide a specific
+behavior for several class-based views, it is recommended that you use mixins.
+
+Using mixins for class-based views::
+--Mixins are a special kind of multiple inheritance for a class. You can use them
+to provide common discrete functionality that, when added to other mixins, allows
+you to define the behavior of a class.
+There are two main situations to use mixins:::
+• You want to provide multiple optional features for a class
+• You want to use a particular feature in several classes
+
+Working with groups and permissions:::
+--You have created the basic views to manage courses. Currently, any user could
+access these views. You want to restrict these views so that only instructors have the
+permission to create and manage courses.
+
+--Django's authentication framework includes a permission system that allows you
+to assign permissions to users and groups. You are going to create a group for
+instructor users and assign permissions to create, update, and delete courses
+
+open http://127.0.0.1:8000/admin/auth/group/add/ to create new group object.
+--name: instructor
+--Add the name Instructors and choose all permissions
+of the courses application, except those of the Subject model,
+
+--Open http://127.0.0.1:8000/admin/auth/user/add/ and create a new user.
+--Edit the user and add it to the Instructors group, as follows:
+
+--Users inherit the permissions of the groups they belong to, but you can also add
+individual permissions to a single user using the administration site
+
+Restricting access to class-based views::
+--You are going to restrict access to the views so that only users with the appropriate
+permissions can add, change, or delete Course objects.
+
+• LoginRequiredMixin: Replicates the login_required decorator's
+functionality.
+• PermissionRequiredMixin: Grants access to the view to users with
+a specific permission. Remember that superusers automatically have
+all permissions.
+
+http://127.0.0.1:8000/accounts/login/?next=/course/mine/
+--log in with a user belonging to the Instructors group. After logging
+in, you will be redirected to the http://127.0.0.1:8000/course/mine/ URL
