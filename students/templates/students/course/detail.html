@@ -33,6 +33,10 @@ item to display it using item.render  -->
     </ul>
   </div>
   <div class="module">
+    <!-- You cache this template fragment using the name module_contents and passing
+the current Module object to it. Thus, you uniquely identify the fragment. This is
+important to avoid caching a module's contents and serving the wrong content
+when a different module is requested -->
     {% cache 600 module_contents module %}
       {% for content in module.contents.all %}
         {% with item=content.item %}

@@ -70,3 +70,25 @@ Instead, you have to create the base QuerySet Course.objects.annotate(total_
 modules=Count('modules')), which is not going to be executed until it
 is forced, and use it to further restrict the QuerySet with all_courses.
 filter(subject=subject) in case the data was not found in the cache.
+
+Lecture 3:
+Caching template fragments:
+--Caching template fragments is a higher-level approach. You need to load the cache
+template tags in your template using {% load cache %}. Then, you will be able to
+use the {% cache %} template tag to cache specific template fragments.
+
+{% cache 300 fragment_name %}
+...
+{% endcache %}
+
+--The {% cache %} template tag has two required arguments: the timeout in seconds
+and a name for the fragment. If you need to cache content depending on dynamic
+data, you can do so by passing additional arguments to the {% cache %} template
+tag to uniquely identify the fragment.
+
+--If the USE_I18N setting is set to True, the per-site middleware
+cache will respect the active language. If you use the {% cache
+%} template tag, you have to use one of the translation-specific
+variables available in templates to achieve the same result, such
+as {% cache 600 name request.LANGUAGE_CODE %}.
+
