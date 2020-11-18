@@ -122,3 +122,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# redirect students to the student_course_list when they log in to the platform
+from django.urls import reverse_lazy
+LOGIN_REDIRECT_URL = reverse_lazy('student_course_list')
+
+'''is the setting used by the auth module to redirect the student after a successful
+login if no next parameter is present in the request'''

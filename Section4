@@ -36,3 +36,11 @@ Course and User models.
 in your browser, and click a course. If you are logged in, you should see an ENROLL
 NOW button placed below the course overview
 
+Lecture 3:
+Accessing the course contents::
+--You need a view for displaying the courses that students are enrolled on, and a
+view for accessing the actual course contents.
+
+--is the setting used by the auth module to redirect the student after a successful
+login if no next parameter is present in the request
+
