@@ -54,3 +54,19 @@ The Miss Ratio is calculated using both of them
 --Next, navigate back to http://127.0.0.1:8000/ using your browser and reload the
 page several times. If you take a look at the cache statistics now, you will see several
 more reads.
+
+Lecture 2:
+Caching based on dynamic data::
+--Often, you will want to cache something that is based on dynamic data. In these
+cases, you have to build dynamic keys that contain all the information required to
+uniquely identify the cached data.
+
+--It is important to note that you can't use a cached QuerySet to build other QuerySets,
+since what you cached are actually the results of the QuerySet. So you can't do the
+following:
+courses = cache.get('all_courses')
+courses.filter(subject=subject)
+Instead, you have to create the base QuerySet Course.objects.annotate(total_
+modules=Count('modules')), which is not going to be executed until it
+is forced, and use it to further restrict the QuerySet with all_courses.
+filter(subject=subject) in case the data was not found in the cache.

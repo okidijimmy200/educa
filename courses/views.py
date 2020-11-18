@@ -239,8 +239,10 @@ class CourseListView(TemplateResponseMixin, View):
 # If a subject slug URL parameter is given, you retrieve the corresponding subject object and limit the query to the courses that belong to the given subject
             subject = get_object_or_404(Subject, slug=subject)
             key = f'subject_{subject.id}_courses'
+# you also cache both all courses and courses filtered by subject
             courses = cache.get(key)
             if not courses:
+# use the all_courses cache key for storing all courses if no subject is given. If there is a subject, you build the key dynamically with f'subject_{subject.id}_courses'.
                 courses = all_courses.filter(subject=subject)
                 cache.set(key, courses)
         else:
