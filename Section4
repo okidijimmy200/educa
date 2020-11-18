@@ -68,3 +68,120 @@ watch?v=bgV39DlmZ2U, and include it in the url field of the form.
 course, and click on the ENROLL NOW button. You should be enrolled on
 the course and redirected to the student_course_detail URL.
 
+Lecture 5:
+Using the cache framework::
+--HTTP requests to your web application usually entail database access, data
+processing, and template rendering. This is much more expensive in terms of
+processing than serving a static website.
+
+--This is where caching
+becomes precious. By caching queries, calculation results, or rendered content in an
+HTTP request, you will avoid expensive operations in the following requests. This
+translates into shorter response times and less processing on the server side.
+
+--Django includes a robust cache system that allows you to cache data with different
+levels of granularity. You can cache a single query, the output of a specific view,
+parts of rendered template content, or your entire site. Items are stored in the cache
+system for a default time. You can specify the default timeout for cached data.
+
+This is how you will usually use the cache framework when your application gets
+an HTTP request:
+1. Try to find the requested data in the cache
+2. If found, return the cached data
+3. If not found, perform the following steps:
+° Perform the query or processing required to obtain the data
+° Save the generated data in the cache
+° Return the data
+
+Available cache backends::
+• backends.memcached.MemcachedCache or backends.memcached.
+PyLibMCCache: A Memcached backend. Memcached is a fast and efficient
+memory-based cache server. The backend to use depends on the Memcached
+Python bindings you choose.
+• backends.db.DatabaseCache: Use the database as a cache system
+• backends.filebased.FileBasedCache: Use the file storage system. This
+serializes and stores each cache value as a separate file.
+• backends.locmem.LocMemCache: A local memory cache backend. This the
+default cache backend.
+• backends.dummy.DummyCache: A dummy cache backend intended only for
+development. It implements the cache interface without actually caching
+anything. This cache is per-process and thread-safe.
+
+NB:
+For optimal performance, use a memory-based cache backend such
+as the Memcached backend
+
+Installing Memcached::
+--You are going to use the Memcached backend. Memcached runs in memory and it
+is allotted a specified amount of RAM. When the allotted RAM is full, Memcached
+starts removing the oldest data to store new data.
+
+--After installing Memcached, open a shell and start it using the following command:
+memcached -l 127.0.0.1:11211
+Memcached will run on port 11211 by default. However, you can specify a custom
+host and port by using the -l option.
+
+After installing Memcached, you have to install its Python bindings. You can do this
+with the following command:
+*********pip install python-memcached==1.59***************
+
+Cache settings::
+--Django provides the following cache settings:
+• CACHES: A dictionary containing all available caches for the project
+• CACHE_MIDDLEWARE_ALIAS: The cache alias to use for storage
+• CACHE_MIDDLEWARE_KEY_PREFIX: The prefix to use for cache keys
+• Set a prefix to avoid key collisions if you share the same cache between
+several sites
+• CACHE_MIDDLEWARE_SECONDS: The default number of seconds to cache pages
+
+--The caching system for the project can be configured using the CACHES setting.
+This setting allows you to specify the configuration for multiple caches. Each cache
+included in the CACHES dictionary can specify the following data
+
+• BACKEND: The cache backend to use.
+• KEY_FUNCTION: A string containing a dotted path to a callable that takes
+a prefix, version, and key as arguments and returns a final cache key.
+• KEY_PREFIX: A string prefix for all cache keys, to avoid collisions.
+• LOCATION: The location of the cache. Depending on the cache backend, this
+might be a directory, a host and port, or a name for the in-memory backend.
+• OPTIONS: Any additional parameters to be passed to the cache backend.
+• TIMEOUT: The default timeout, in seconds, for storing the cache keys. It is
+300 seconds by default, which is five minutes. If set to None, cache keys
+will not expire.
+• VERSION: The default version number for the cache keys. Useful for cache
+versioning.
+
+Adding Memcached to your project::
+--Let's configure the cache for your project. Edit the settings.py file of the educa
+project and
+
+Monitoring Memcached::
+--In order to monitor Memcached, you will use a third-party package called djangomemcache-
+status. This application displays statistics for your Memcached instances
+in the administration site.
+
+***********pip install django-memcache-status==2.2*************
+
+--Make sure Memcached is running, start the development server in another shell
+window and open http://127.0.0.1:8000/admin/ in your browser. Log in to the
+administration site using a superuser. You should see the following block on the
+index page of the administration site
+
+--The block contains a bar graph that shows the cache load. The green color represents
+free cache, while red indicates used space. If you click the title of the box, it shows
+detailed statistics of your Memcached instance.
+
+Cache levels::
+Django provides the following levels of caching, listed here by ascending order of
+granularity:
+• Low-level cache API: Provides the highest granularity. Allows you to cache
+specific queries or calculations.
+• Template cache: Allows you to cache template fragments.
+• Per-view cache: Provides caching for individual views.
+• Per-site cache: The highest-level cache. It caches your entire site.
+
+NB:
+Think about your cache strategy before implementing caching.
+Focus first on expensive queries or calculations that are not
+calculated on a per-user basis.
+

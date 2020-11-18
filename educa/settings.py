@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'embed_video',
+    'memcache_status',
     
 ]
 
@@ -135,3 +136,12 @@ login if no next parameter is present in the request'''
 MEDIA_URL = '/media/'
 # MEDIA_ROOT is the local path where the files are located
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+# configure the cache for your project
+CACHES = {
+# You are using the MemcachedCache backend. You specify its location using the address:port notation. If you have multiple Memcached instances, you can use a list for LOCATION.
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
