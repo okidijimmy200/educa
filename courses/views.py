@@ -14,13 +14,7 @@ from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from .models import Course, Module, Content, Subject
 from django.views.generic.detail import DetailView
 from .forms import ModuleFormSet
-
-class ManageCourseListView(ListView):
-    model = Course
-    template_name = 'courses/manage/course/list.html'
-    def get_queryset(self):
-        qs = super().get_queryset()
-        return qs.filter(owner=self.request.user)
+from students.forms import CourseEnrollForm
 
 # OwnerMixin implements the get_queryset() method, which is used by the views to get the base QuerySet
 class OwnerMixin(object):
@@ -261,8 +255,10 @@ class CourseDetailView(DetailView):
     model = Course
     template_name = 'courses/course/detail.html'
 # DetailView expects a primary key (pk) or slug URL parameter to retrieve a single object for the given model.
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['enroll_form'] = CourseEnrollForm(
-    #                                initial={'course':self.object})
-    #     return context
+# use the get_context_data() method to include the enrollment form in the context for rendering the templates
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['enroll_form'] = CourseEnrollForm(
+# initialize the hidden course field of the form with the current Course object so that it can be submitted directly.
+                                   initial={'course':self.object})
+        return context

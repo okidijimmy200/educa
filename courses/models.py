@@ -34,6 +34,9 @@ class Course(models.Model):
     overview = models.TextField()
 # created: The date and time when the course was created. It will beautomatically set by Django when creating new objects because of auto_now_ add=True.
     created = models.DateTimeField(auto_now_add=True)
+    students = models.ManyToManyField(User,
+                                    related_name='courses_joined',
+                                    blank=True)
 
     class Meta:
         ordering = ['-created']

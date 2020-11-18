@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 # from courses.models import Course
-# from .forms import CourseEnrollForm
+from .forms import CourseEnrollForm
 
 # use the generic CreateView, which provides the functionality for creating model objects
 class StudentRegistrationView(CreateView):
@@ -26,19 +26,23 @@ class StudentRegistrationView(CreateView):
         login(self.request, user)
         return result
 
+# StudentEnrollCourseView view handles students enrolling on courses. The view inherits from the LoginRequiredMixin mixin so that only logged-in users can access the view
+class StudentEnrollCourseView(LoginRequiredMixin, FormView): #view inherits from Django's FormView view, since you handle a form submission
+# use the CourseEnrollForm form for theform_class attribute and also define a course attribute for storing the given Course object
+    course = None
+    form_class = CourseEnrollForm
 
-# class StudentEnrollCourseView(LoginRequiredMixin, FormView):
-#     course = None
-#     form_class = CourseEnrollForm
+# the form is valid, you add the current user to the students enrolled on the course.
+    def form_valid(self, form):
+        self.course = form.cleaned_data['course']
+        self.course.students.add(self.request.user)
+        return super().form_valid(form)
 
-#     def form_valid(self, form):
-#         self.course = form.cleaned_data['course']
-#         self.course.students.add(self.request.user)
-#         return super().form_valid(form)
-
-#     def get_success_url(self):
-#         return reverse_lazy('student_course_detail',
-#                             args=[self.course.id])
+# get_success_url() method returns the URL that the user will be redirected to if the form was successfully submitted
+    def get_success_url(self):
+        # reverse the URL named student_course_detail.
+        return reverse_lazy('student_course_detail',
+                            args=[self.course.id])
 
 
 # class StudentCourseListView(LoginRequiredMixin, ListView):

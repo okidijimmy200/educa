@@ -19,5 +19,20 @@ Adding student registration::
 **********python manage.py startapp students***********
 
 Creating a student registration view::
+--open http://127.0.0.1:8000/students/register/ in your browser. You should see a registration form
 
+Lecture 2:
+Enrolling on courses
+--After users create an account, they should be able to enroll on courses. In order
+to store enrollments, you need to create a many-to-many relationship between the
+Course and User models.
+
+*********python manage.py makemigrations***********
+
+*****python manage.py migrate*******
+
+--Let's add the enroll button form to the course overview page.
+--open http://127.0.0.1:8000/
+in your browser, and click a course. If you are logged in, you should see an ENROLL
+NOW button placed below the course overview
 
