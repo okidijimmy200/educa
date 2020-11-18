@@ -92,3 +92,35 @@ cache will respect the active language. If you use the {% cache
 variables available in templates to achieve the same result, such
 as {% cache 600 name request.LANGUAGE_CODE %}.
 
+Lecture 5:
+Caching views::
+--You can cache the output of individual views using the cache_page decorator
+located at django.views.decorators.cache. The decorator requires a timeout
+argument (in seconds)
+--The per-view cache uses the URL to build the cache key. Multiple
+URLs pointing to the same view will be cached separately.
+
+Using the per-site cache::
+--This is the highest-level cache. It allows you to cache your entire site. To
+allow the per-site cache, edit the settings.py file of your project and add
+the UpdateCacheMiddleware and FetchFromCacheMiddleware classes to
+the MIDDLEWARE setting.
+
+--UpdateCacheMiddleware
+is placed before CommonMiddleware because it runs during response time, when
+middleware are executed in reverse order. FetchFromCacheMiddleware is placed
+after CommonMiddleware intentionally because it needs to access request data set by
+the latter.
+
+--Your site will now cache and return cached content for all GET requests.
+
+--You have done this to test the per-site cache functionality. However, the per-site
+cache is not suitable for you, since the course management views need to show
+updated data to instantly reflect any changes. The best approach to follow in your
+project is to cache the templates or views that are used to display course contents to
+students.
+
+--You have seen an overview of the methods provided by Django to cache data.
+You should define your cache strategy wisely and prioritize the most expensive
+QuerySets or calculations.
+
