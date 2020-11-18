@@ -1,0 +1,56 @@
+Lecture 1:
+Using the low-level cache API::
+--Using the low-level cache API
+The low-level cache API allows you to store objects in the cache with any granularity.
+--It is located at django.core.cache. You can import it like this:
+from django.core.cache import cache
+
+Open the shell with the command
+python manage.py shell and execute the following code:
+>>> from django.core.cache import cache
+>>> cache.set('musician', 'Django Reinhardt', 20)
+
+--You access the default cache backend and use set(key, value, timeout) to store
+a key named 'musician' with a value that is the string 'Django Reinhardt' for 20
+seconds. If you don't specify a timeout, Django uses the default timeout specified for
+the cache backend in the CACHES setting
+
+-->>> cache.get('musician')
+'Django Reinhardt'
+
+--You retrieve the key from the cache. Wait for 20 seconds and execute the same code:
+>>> cache.get('musician')
+No value is returned this time. The 'musician' cache key has expired and the get()
+method returns None because the key is not in the cache anymore.
+
+NB:
+Always avoid storing a None value in a cache key because
+you won't be able to distinguish between the actual value and
+a cache miss.
+
+Let's cache a QuerySet with the following code:
+>>> from courses.models import Subject
+>>> subjects = Subject.objects.all()
+>>> cache.set('my_subjects', subjects)
+You perform a QuerySet on the Subject model and store the returned objects in the
+'my_subjects' key. Let's retrieve the cached data:
+>>> cache.get('my_subjects')
+<QuerySet [<Subject: Mathematics>, <Subject: Music>, <Subject: Physics>,
+<Subject: Programming>]>
+
+--cache some queries in your views
+
+--Run the development server and open http://127.0.0.1:8000/ in your browser.
+When the view is executed, the cache key is not found and the QuerySet is
+executed. Open http://127.0.0.1:8000/admin/ in your browser and click on the
+Memcached section to expand the statistics. You should see usage data for the cache
+that is similar to the following screen
+
+--Take a look at Curr Items, which should be 1. This shows that there is one item
+currently stored in the cache. Get Hits shows how many get commands were
+successful and Get Misses shows the get requests for keys that are missing.
+The Miss Ratio is calculated using both of them
+
+--Next, navigate back to http://127.0.0.1:8000/ using your browser and reload the
+page several times. If you take a look at the cache statistics now, you will see several
+more reads.

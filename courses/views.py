@@ -16,6 +16,7 @@ from django.views.generic.detail import DetailView
 from .forms import ModuleFormSet
 from students.forms import CourseEnrollForm
 
+
 # OwnerMixin implements the get_queryset() method, which is used by the views to get the base QuerySet
 class OwnerMixin(object):
     def get_queryset(self):
@@ -222,7 +223,10 @@ class CourseListView(TemplateResponseMixin, View):
     template_name = 'courses/course/list.html'
 
     def get(self, request, subject=None):
+# you try to get the all_students key from the cache using cache. get()
         subjects = cache.get('all_subjects')
+# returns None if the given key is not found. If no key is found (not cached yet or cached but timed out), you perform the query to retrieve all Subject objects
+# and their number of courses, and you cache the result using cache.set().
         if not subjects:
 # You retrieve all subjects, using the ORM's annotate() method with the Count() aggregation function to include the total number of courses for each subject
             subjects = Subject.objects.annotate(
