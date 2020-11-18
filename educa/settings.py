@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'embed_video',
     
 ]
 
@@ -129,3 +130,8 @@ LOGIN_REDIRECT_URL = reverse_lazy('student_course_list')
 
 '''is the setting used by the auth module to redirect the student after a successful
 login if no next parameter is present in the request'''
+
+# MEDIA_URL is the base URL to serve uploaded media files
+MEDIA_URL = '/media/'
+# MEDIA_ROOT is the local path where the files are located
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

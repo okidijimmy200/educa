@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from .fields import OrderField
+from django.template.loader import render_to_string
 
 
 class Subject(models.Model):
@@ -107,6 +108,14 @@ class ItemBase(models.Model):
 
     def __str__(self):
         return self.title
+# This method uses the render_to_string() function for rendering a template and returning the rendered content as a string 
+# The render() method provides a common interface for rendering diverse content.  
+    def render(self):
+# Each kind of content is rendered using a template named after the content model.
+        return render_to_string(f'courses/content/{self._meta.model_name}.html',
+# You use self._meta.model_name to generate the appropriate template name for each content model dynamically.
+                                {'item': self})
+
 # Text content models that inherit from the ItemBase abstract model.
 class Text(ItemBase):
     # Text: To store text content

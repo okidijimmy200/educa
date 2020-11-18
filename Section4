@@ -44,3 +44,27 @@ view for accessing the actual course contents.
 --is the setting used by the auth module to redirect the student after a successful
 login if no next parameter is present in the request
 
+Lecture 4:
+Rendering different types of content::
+--You need to provide a way to render each type of content. Edit the models.py file
+of the courses application and add the following render() method to the ItemBase
+model:
+
+--For files uploaded with ImageField and
+FileField to work, you need to set up your project to serve media files with the
+development server.
+
+--You also have to create a template for rendering Video objects. You will use djangoembed-
+video for embedding video content.
+
+*********pip install django-embed-video==1.3.2************
+
+--access http://127.0.0.1:8000/course/mine/ in your browser. Access the site with a user belonging to the Instructors
+group, and add multiple contents to a course. To include video content,
+you can just copy any YouTube URL, such as https://www.youtube.com/
+watch?v=bgV39DlmZ2U, and include it in the url field of the form.
+
+--After adding contents to the course, open http://127.0.0.1:8000/, click the
+course, and click on the ENROLL NOW button. You should be enrolled on
+the course and redirected to the student_course_detail URL.
+
