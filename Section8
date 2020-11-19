@@ -28,3 +28,77 @@ into your project in addition to your standard HTTP synchronous views.
 ********django-admin startapp chat*********
 
 Lecture 2:
+Implementing the chat room view::
+--You will provide students with a different chat room for each course. You need to
+create a view for students to join the chat room of a given course. Only students
+who are enrolled on a course will be able to access the course chat room.
+
+--create a template for the course_chat_room view. This template will
+contain an area to visualize the messages that are exchanged in the chat and a text
+input with a submit button to send text messages to the chat
+
+--open http://127.0.0.1:8000/chat/room/1/ in your browser, replacing 1 with the id of an existing course in the database.
+
+Deactivating the per-site cache::
+--You will deactivate the per-site
+cache to avoid site-wide caching and only use caching where needed.
+
+Real-time Django with Channels::
+--This functionality requires real-time communication between
+the server and the client. The client should be able to connect to the chat and send
+or receive data at any time.
+
+Asynchronous applications using ASGI::
+--to work with asynchronous applications, you need to use another interface called
+ASGI, which can handle WebSocket requests as well
+
+--WebSockets provide full-duplex communication by establishing a persistent, open,
+bidirectional Transmission Control Protocol (TCP) connection between servers and
+clients. You are going to use WebSockets to implement your chat server.
+--When an HTTP request is sent by the browser to the web server, Django handles
+the request and passes the HttpRequest object to the corresponding view. The
+view processes the request and returns an HttpResponse object that is sent back
+to the browser as an HTTP response. There is no mechanism to maintain an open
+connection or send data to the browser without an associated HTTP request.
+
+--Channels replaces Django's request/response cycle with messages that are sent
+across channels. HTTP requests are still routed to view functions using Django,
+but they get routed over channels. This allows for WebSockets message handling
+as well, where you have producers and consumers that exchange messages across
+a channel layer.
+
+Installing Channels::
+****pip install channels==2.4.0**********
+
+--install twist before channel
+--Channels expects you to define a single root application that will be executed for
+all requests. You can define the root application by adding the ASGI_APPLICATION
+setting to your project
+
+-we wil put it in routing.py
+
+Then, add the following line to the settings.py file of your project:
+ASGI_APPLICATION = 'educa.routing.application'
+
+--When Channels is added to the INSTALLED_APPS setting, it takes control over the
+runserver command, replacing the standard Django development server. Besides
+handling URL routing to Django views for synchronous requests, the Channels
+development server also manages routes to WebSocket consumers.
+
+--Check that the output contains the line Starting ASGI/Channels version
+2.4.0 development server. This line confirms that you are using the Channels
+development server, which is capable of managing synchronous and asynchronous
+requests.
+In order to implement the chat server for your project, you will need to:::
+--1. Set up a consumer: Consumers are individual pieces of code that can handle
+WebSockets in a very similar way to traditional HTTP views. You will build
+a consumer to read and write messages to a communication channel.
+2. Configure routing: Channels provides routing classes that allow you to
+combine and stack your consumers. You will configure URL routing for
+your chat consumer.
+3. Implement a WebSocket client: When the student accesses the chat room,
+you will connect to the WebSocket from the browser and send or receive
+messages using JavaScript.
+4. Enable a channel layer: Channel layers allow you to talk between different
+instances of an application. They're a useful part of making a distributed
+real-time application. You will set up a channel layer using Redis.
