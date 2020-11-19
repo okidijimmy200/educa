@@ -1,0 +1,24 @@
+Lecture 1:
+Adding permissions to views::
+REST framework includes a permission system to restrict access to views. Some
+of the built-in permissions of REST framework are:
+• AllowAny: Unrestricted access, regardless of whether a user is authenticated
+or not.
+• IsAuthenticated: Allows access to authenticated users only.
+• IsAuthenticatedOrReadOnly: Complete access to authenticated users.
+Anonymous users are only allowed to execute read methods such as GET,
+HEAD, or OPTIONS.
+• DjangoModelPermissions: Permissions tied to django.contrib.auth. The
+view requires a queryset attribute. Only authenticated users with model
+permissions assigned are granted permission.
+• DjangoObjectPermissions: Django permissions on a per-object basis.
+
+If users are denied permission, they will usually get one of the following HTTP
+error codes:
+• HTTP 401: Unauthorized
+• HTTP 403: Permission denied
+
+****http://127.0.0.1:8000/api/courses/1/enroll/******
+--You can access the administration site and check that the user is now enrolled on
+the course.
+

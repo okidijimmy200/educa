@@ -23,15 +23,19 @@ class SubjectDetailView(generics.RetrieveAPIView):
     queryset = Subject.objects.all()
     serializer_class = SubjectSerializer
 
-
-# class CourseEnrollView(APIView):
-#     authentication_classes = (BasicAuthentication,)
-#     permission_classes = (IsAuthenticated,)
-
-#     def post(self, request, pk, format=None):
-#         course = get_object_or_404(Course, pk=pk)
-#         course.students.add(request.user)
-#         return Response({'enrolled': True})
+# CourseEnrollView view handles user enrollment on courses
+class CourseEnrollView(APIView): #You create a custom view that subclasses APIView.
+# Users will be identified by the credentials set in the Authorization header of the HTTP request
+    authentication_classes = (BasicAuthentication,)
+# You include the IsAuthenticated permission. This will prevent anonymous users from accessing the view.
+    permission_classes = (IsAuthenticated,)
+# You define a post() method for POST actions. No other HTTP method will be allowed for this view
+    def post(self, request, pk, format=None):
+# You expect a pk URL parameter containing the ID of a course. You retrieve the course by the given pk parameter and raise a 404 exception if it's not found
+        course = get_object_or_404(Course, pk=pk)
+        # You add the current user to the students many-to-many relationship of the Course object and return a successful response.
+        course.students.add(request.user)
+        return Response({'enrolled': True})
 
 
 # class CourseViewSet(viewsets.ReadOnlyModelViewSet):

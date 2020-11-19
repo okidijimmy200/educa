@@ -127,3 +127,43 @@ manage.py shell,
 You can see that the related objects of the modules manager are serialized as a list
 of primary keys, as follows:
 "modules": [6, 7, 9, 10]
+
+Lecture 6:
+Building custom API views:
+--REST framework provides an APIView class that builds API functionality on top of
+Django's View class.
+--differs from View by using REST framework's
+custom Request and Response objects, and handling APIException exceptions
+to return the appropriate HTTP responses. It also has a built-in authentication and
+authorization system to manage access to views
+
+Handling authentication::
+--REST framework provides authentication classes to identify the user performing
+the request. If authentication is successful, the framework sets the authenticated
+User object in request.user. If no user is authenticated, an instance of Django's
+AnonymousUser is set instead.
+
+DRF authentication backends:
+• BasicAuthentication: This is HTTP basic authentication. The user and
+password are sent by the client in the Authorization HTTP header encoded
+with Base64.
+• TokenAuthentication: This is token-based authentication. A Token model
+is used to store user tokens. Users include the token in the Authorization
+HTTP header for authentication.
+• SessionAuthentication: This uses Django's session backend for
+authentication. This backend is useful for performing authenticated
+AJAX requests to the API from your website's frontend
+• RemoteUserAuthentication: This allows you to delegate authentication
+to your web server, which sets a REMOTE_USER environment variable.
+
+--You can build a custom authentication backend by subclassing the
+BaseAuthentication class provided by REST framework and overriding the
+authenticate() method.
+
+NB::
+--Authentication only identifies the user performing the request. It
+won't allow or deny access to views. You have to use permissions
+to restrict access to views.
+
+
+
