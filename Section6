@@ -1,0 +1,44 @@
+Building an API::
+In this chapter, you will:
+• Install Django REST framework
+• Create serializers for your models
+• Build a RESTful API
+• Create nested serializers
+• Build custom API views
+• Handle API authentication
+• Add permissions to API views
+• Create a custom permission
+• Implement viewsets and routers
+• Use the Requests library to consume the API
+
+Lecture 1:
+Building a RESTful API
+--When building an API, there are several ways you can structure its endpoints and
+actions, but following REST principles is encouraged. The REST architecture comes
+from Representational State Transfer. RESTful APIs are resource-based; your
+models represent resources and HTTP methods such as GET, POST, PUT, or DELETE
+are used to retrieve, create, update, or delete objects. HTTP response codes are also
+used in this context. Different HTTP response codes are returned to indicate the
+result of the HTTP request, for example, 2XX response codes for success, 4XX for
+errors, and so on.
+
+The most common formats to exchange data in RESTful APIs are JSON and XML.
+You will build a RESTful API with JSON serialization for your project.
+
+Your API
+will provide the following functionality:
+• Retrieve subjects
+• Retrieve available courses
+• Retrieve course contents
+• Enroll on a course
+
+Installing Django Rest Framework:
+*******pip install djangorestframework==3.11.0***********
+
+
+--The DEFAULT_PERMISSION_CLASSES setting specifies
+the default permissions to read, create, update, or delete objects. You set
+DjangoModelPermissionsOrAnonReadOnly as the only default permission class.
+This class relies on Django's permissions system to allow users to create, update,
+or delete objects, while providing read-only access for anonymous users
+
