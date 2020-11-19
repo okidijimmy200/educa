@@ -68,3 +68,39 @@ represents object relationships with links rather than primary keys
 --you get a Subject object, create an instance of SubjectSerializer,
 and access the serialized data. You can see that the model data is translated into
 Python native data types.
+
+Lecture 3:
+Understanding parsers and renderers::
+--The serialized data has to be rendered in a specific format before you return it in
+an HTTP response.
+--when you get an HTTP request, you have to parse the
+incoming data and deserialize it before you can operate with it. REST framework
+includes renderers and parsers to handle that
+
+Let's see how to parse incoming data. Execute the following code in the Python shell:
+>>> from io import BytesIO
+>>> from rest_framework.parsers import JSONParser
+>>> data = b'{"id":4,"title":"Programming","slug":"programming"}'
+>>> JSONParser().parse(BytesIO(data))
+{'id': 4, 'title': 'Programming', 'slug': 'programming'}
+
+--Given a JSON string input, you can use the JSONParser class provided by REST
+framework to convert it to a Python object.
+
+--REST framework also includes Renderer classes that allow you to format API
+responses. The framework determines which renderer to use through content
+negotiation by inspecting the request's Accept header to determine the expected
+content type for the response. Optionally, the renderer is determined by the format
+suffix of the URL.
+
+run shell
+>>> from rest_framework.renderers import JSONRenderer
+>>> JSONRenderer().render(serializer.data)
+
+You will see the following output:
+b'{"id":4,"title":"Programming","slug":"programming"}'
+
+--You use the JSONRenderer to render the serialized data into JSON. By
+default, REST framework uses two different renderers: JSONRenderer and
+BrowsableAPIRenderer.
+
