@@ -22,3 +22,27 @@ error codes:
 --You can access the administration site and check that the user is now enrolled on
 the course.
 
+Lecture 2:
+Creating viewsets and routers::
+--ViewSets allow you to define the interactions of your API and let REST framework
+build the URLs dynamically with a Router object. By using viewsets, you can
+avoid repeating logic for multiple views.
+--Viewsets include actions for the following
+standard operations:
+• Create operation: create()
+• Retrieve operation: list() and retrieve()
+• Update operation: update() and partial_update()
+• Delete operation: destroy()
+
+--You create a DefaultRouter object and register your viewset with the courses
+prefix. The router takes charge of generating URLs automatically for your viewset.
+
+-open http://127.0.0.1:8000/api/ in your browser. You will see that the router
+lists all viewsets in its base URL,
+
+--You can access http://127.0.0.1:8000/api/courses/ to retrieve the list of
+courses.
+
+Adding additional actions to viewsets::
+--You can add extra actions to viewsets. Let's change your previous
+CourseEnrollView view into a custom viewset action.

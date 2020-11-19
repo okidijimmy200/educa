@@ -37,24 +37,28 @@ class CourseEnrollView(APIView): #You create a custom view that subclasses APIVi
         course.students.add(request.user)
         return Response({'enrolled': True})
 
+# You subclass ReadOnlyModelViewSet, which provides the read-only actions list() and retrieve() to both list objects, or retrieves a single object
+class CourseViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+# add a custom enroll() method that represents an additional action for this viewset.
+# use the action decorator of the framework with the parameter detail=True to specify that this is an action to be performed on a single object
+    @action(detail=True,
+# The decorator allows you to add custom attributes for the action. You specify that only the post() method is allowed for this view and set the authentication and permission classes
+            methods=['post'],
+            authentication_classes=[BasicAuthentication],
+            permission_classes=[IsAuthenticated])
+    def enroll(self, request, *args, **kwargs):
+# use self.get_object() to retrieve the Course object
+        course = self.get_object()
+# add the current user to the students many-to-many relationship and return a custom success response
+        course.students.add(request.user)
+        return Response({'enrolled': True})
 
-# class CourseViewSet(viewsets.ReadOnlyModelViewSet):
-#     queryset = Course.objects.all()
-#     serializer_class = CourseSerializer
-
-#     @action(detail=True,
-#             methods=['post'],
-#             authentication_classes=[BasicAuthentication],
-#             permission_classes=[IsAuthenticated])
-#     def enroll(self, request, *args, **kwargs):
-#         course = self.get_object()
-#         course.students.add(request.user)
-#         return Response({'enrolled': True})
-
-#     @action(detail=True,
-#             methods=['get'],
-#             serializer_class=CourseWithContentsSerializer,
-#             authentication_classes=[BasicAuthentication],
-#             permission_classes=[IsAuthenticated, IsEnrolled])
-#     def contents(self, request, *args, **kwargs):
-#         return self.retrieve(request, *args, **kwargs)
+    # @action(detail=True,
+    #         methods=['get'],
+    #         serializer_class=CourseWithContentsSerializer,
+    #         authentication_classes=[BasicAuthentication],
+    #         permission_classes=[IsAuthenticated, IsEnrolled])
+    # def contents(self, request, *args, **kwargs):
+    #     return self.retrieve(request, *args, **kwargs)
