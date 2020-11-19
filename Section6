@@ -104,3 +104,10 @@ b'{"id":4,"title":"Programming","slug":"programming"}'
 default, REST framework uses two different renderers: JSONRenderer and
 BrowsableAPIRenderer.
 
+Lecture 4:
+Building list and detail views:
+--REST framework comes with a set of generic views and mixins that you can use to
+build your API views. They provide the functionality to retrieve, create, update, or
+delete model objects.
+
+*****curl http://127.0.0.1:8000/api/subjects/**********
