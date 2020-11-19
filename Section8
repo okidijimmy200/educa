@@ -102,3 +102,20 @@ messages using JavaScript.
 4. Enable a channel layer: Channel layers allow you to talk between different
 instances of an application. They're a useful part of making a distributed
 real-time application. You will set up a channel layer using Redis.
+
+Lecture 3:
+Writing a consumer::
+--Consumers are the equivalent of Django views for asynchronous applications. As
+mentioned, they handle WebSockets in a very similar way to how traditional views
+handle HTTP requests.
+--Consumers are ASGI applications that can handle messages,
+notifications, and other things.consumers are built for longrunning
+communication. URLs are mapped to consumers through routing classes
+that allow you to combine and stack consumers
+
+Routing::
+--You need to define a URL to route connections to the ChatConsumer consumer you
+have implemented. Channels provides routing classes that allow you to combine
+and stack consumers to dispatch based on what the connection is. You can think
+of them as the URL routing system of Django for asynchronous applications.
+
