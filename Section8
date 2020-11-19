@@ -1,0 +1,30 @@
+Building a Chat Server
+--In this chapter,
+you will build a chat server for students using Django Channels. Students will
+be able to access a different chat room for each course they are enrolled on. To
+create the chat server, you will learn how to serve your Django project through
+Asynchronous Server Gateway Interface (ASGI), and you will implement
+asynchronous communication.
+
+--chapter, you will:
+• Add Channels to your project
+• Build a WebSocket consumer and appropriate routing
+• Implement a WebSocket client
+• Enable a channel layer with Redis
+• Make your consumer fully asynchronous
+
+Lecture 1:
+Creating a chat application::
+--You are going to implement a chat server to provide students with a chat room
+for each course. Students enrolled on a course will be able to access the course
+chat room and exchange messages in real time. You will use Channels to build
+this functionality. Channels is a Django application that extends Django to handle
+protocols that require long-running connections, such as WebSockets, chatbots,
+or MQTT (a lightweight publish/subscribe message transport commonly used
+in Internet of things projects
+--Using Channels, you can easily implement real-time or asynchronous functionalities
+into your project in addition to your standard HTTP synchronous views.
+
+********django-admin startapp chat*********
+
+Lecture 2:

@@ -68,3 +68,33 @@ of the course includes the rendered HTML for course contents
 
 --REST framework also allows you to handle creating
 and editing objects with the ModelViewSet viewset
+
+Lecture 4:
+Consuming the RESTful API::
+--You are going to create a simple Python application that uses the RESTful API to
+retrieve all available courses and then enrolls a student on all of them. You will learn
+how to authenticate against the API using HTTP basic authentication, and perform
+GET and POST requests.
+--You will use the Python Requests library to consume the API. Requests is the
+most popular HTTP library for Python. It abstracts the complexity of dealing with
+HTTP requests and provides a very simple interface to consume HTTP services.
+
+*******pip install requests==2.23***********
+
+
+****python manage.py runserver********
+
+In another shell, run the following command from the api_examples/ directory:
+*********python enroll_all.py********
+--You will see output with a list of all course titles
+Available courses: Django course, Course1
+
+Run the following command from the api_examples/ directory:
+python enroll_all.py
+You will now see output like this:
+Available courses: Introduction to Django, Python for beginners, Algebra
+basics
+Successfully enrolled in Introduction to Django
+Successfully enrolled in Python for beginners
+Successfully enrolled in Algebra basics
+
