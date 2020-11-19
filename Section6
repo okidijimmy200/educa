@@ -42,3 +42,29 @@ DjangoModelPermissionsOrAnonReadOnly as the only default permission class.
 This class relies on Django's permissions system to allow users to create, update,
 or delete objects, while providing read-only access for anonymous users
 
+Lecture 2:
+Defining serializers::
+--After setting up REST framework, you need to specify how your data will be
+serialized. Output data has to be serialized in a specific format, and input data
+will be deserialized for processing.
+
+The framework provides the following classes
+to build serializers for single objects:
+• Serializer: Provides serialization for normal Python class instances
+• ModelSerializer: Provides serialization for model instances
+• HyperlinkedModelSerializer: The same as ModelSerializer, but it
+represents object relationships with links rather than primary keys
+
+****python manage.py shell******
+
+--run
+>>> from courses.models import Subject
+>>> from courses.api.serializers import SubjectSerializer
+>>> subject = Subject.objects.latest('id')
+>>> serializer = SubjectSerializer(subject)
+>>> serializer.data
+{'id': 4, 'title': 'Programming', 'slug': 'programming'}
+
+--you get a Subject object, create an instance of SubjectSerializer,
+and access the serialized data. You can see that the model data is translated into
+Python native data types.
