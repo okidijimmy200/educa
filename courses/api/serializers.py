@@ -9,7 +9,7 @@ class SubjectSerializer(serializers.ModelSerializer):
         model = Subject
         fields = ['id', 'title', 'slug']
 
-
+# You want to include more information about each module, so you need to serialize Module objects and nest them
 class ModuleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Module
@@ -17,6 +17,8 @@ class ModuleSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
+# add a modules attribute to CourseSerializer to nest the ModuleSerializer serializer. You set many=True to indicate that you are serializing multiple objects.
+# The read_only parameter indicates that this field is read-only and should not be included in any input to create or update objects
     modules = ModuleSerializer(many=True, read_only=True)
 
     class Meta:

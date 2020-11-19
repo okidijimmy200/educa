@@ -111,3 +111,19 @@ build your API views. They provide the functionality to retrieve, create, update
 delete model objects.
 
 *****curl http://127.0.0.1:8000/api/subjects/**********
+
+Lecture 5:
+Creating nested serializers::
+--Let's take a look at how a Course object is serialized. Open the shell, run python
+manage.py shell,
+>>> from rest_framework.renderers import JSONRenderer
+>>> from courses.models import Course
+>>> from courses.api.serializers import CourseSerializer
+>>> course = Course.objects.latest('id')
+>>> serializer = CourseSerializer(course)
+>>> JSONRenderer().render(serializer.data)
+
+--will get a JSON object with the fields that you included in CourseSerializer.
+You can see that the related objects of the modules manager are serialized as a list
+of primary keys, as follows:
+"modules": [6, 7, 9, 10]
