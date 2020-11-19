@@ -26,20 +26,22 @@ class CourseSerializer(serializers.ModelSerializer):
         fields = ['id', 'subject', 'title', 'slug', 'overview',
                   'created', 'owner', 'modules']
 
-
+# you define a custom field by subclassing the RelatedField serializer field provided by REST framework
 class ItemRelatedField(serializers.RelatedField):
+    # overriding the to_representation() method
     def to_representation(self, value):
         return value.render()
 
-
+# ContentSerializer serializer for the Content model
 class ContentSerializer(serializers.ModelSerializer):
+    # use the custom field for the item generic foreign key
     item = ItemRelatedField(read_only=True)
 
     class Meta:
         model = Content
         fields = ['order', 'item']
 
-
+# alternative serializer for the Module model
 class ModuleWithContentsSerializer(serializers.ModelSerializer):
     contents = ContentSerializer(many=True)
 

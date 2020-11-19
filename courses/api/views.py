@@ -8,7 +8,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from ..models import Subject, Course
 from .serializers import SubjectSerializer, CourseSerializer, CourseWithContentsSerializer
-# from .permissions import IsEnrolled
+from .permissions import IsEnrolled
 
 # generic ListAPIView
 class SubjectListView(generics.ListAPIView):
@@ -54,11 +54,16 @@ class CourseViewSet(viewsets.ReadOnlyModelViewSet):
 # add the current user to the students many-to-many relationship and return a custom success response
         course.students.add(request.user)
         return Response({'enrolled': True})
-
-    # @action(detail=True,
-    #         methods=['get'],
-    #         serializer_class=CourseWithContentsSerializer,
-    #         authentication_classes=[BasicAuthentication],
-    #         permission_classes=[IsAuthenticated, IsEnrolled])
-    # def contents(self, request, *args, **kwargs):
-    #     return self.retrieve(request, *args, **kwargs)
+# a view that mimics the behavior of the retrieve() action, but includes the course contents
+# You use the action decorator with the parameter detail=True to specify an action that is performed on a single object
+    @action(detail=True,
+            # You specify that only the GET method is allowed for this action
+            methods=['get'],
+# You use the new CourseWithContentsSerializer serializer class that includes rendered course contents
+            serializer_class=CourseWithContentsSerializer,
+            authentication_classes=[BasicAuthentication],
+# You use both IsAuthenticated and your custom IsEnrolled permissions. By doing so, you make sure that only users enrolled on the course are able to access its contents
+            permission_classes=[IsAuthenticated, IsEnrolled])
+    def contents(self, request, *args, **kwargs):
+        # use the existing retrieve() action to return the Course object
+        return self.retrieve(request, *args, **kwargs)

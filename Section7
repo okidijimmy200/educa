@@ -46,3 +46,25 @@ courses.
 Adding additional actions to viewsets::
 --You can add extra actions to viewsets. Let's change your previous
 CourseEnrollView view into a custom viewset action.
+
+Lecture 3:
+Creating custom permissions::
+--You want students to be able to access the contents of the courses they are enrolled
+on. Only students enrolled on a course should be able to access its contents. The best
+way to do this is with a custom permission class. Django provides a BasePermission
+class that allows you to define
+• has_permission(): View-level permission check
+• has_object_permission(): Instance-level permission check
+
+--Create a new file inside the courses/api/ directory and name it permissions.py
+
+Serializing course contents::
+--You need to serialize course contents. The Content model includes a generic foreign
+key that allows you to associate objects of different content models.
+
+--Open http://127.0.0.1:8000/api/courses/1/contents/ in your browser.
+If you access the view with the right credentials, you will see that each module
+of the course includes the rendered HTML for course contents
+
+--REST framework also allows you to handle creating
+and editing objects with the ModelViewSet viewset
