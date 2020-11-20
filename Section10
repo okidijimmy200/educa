@@ -1,0 +1,64 @@
+Going Live::
+• Configuring a production environment
+• Creating a custom middleware
+• Implementing custom management commands
+
+Lecture 1:
+Creating a production environment::
+• Configure project settings for a production environment
+• Use a PostgreSQL database
+• Set up a web server with uWSGI and NGINX
+• Serve static assets through NGINX
+• Secure connections using SSL
+• Use Daphne to serve Django Channels
+
+Managing settings for multiple environments::
+--In real-world projects, you will have to deal with multiple environments. You
+will have at least a local and a production environment, but you could have other
+environments as well, such as testing or preproduction environments. Some project
+settings will be common to all environments, but others will have to be overridden
+per environment.
+
+Create a settings/ directory next to the settings.py file of the educa project.
+Rename the settings.py file to base.py and move it into the new settings/
+directory
+
+These files are as follows:
+• base.py: The base settings file that contains common settings (previously
+settings.py)
+• local.py: Custom settings for your local environment
+• pro.py: Custom settings for the production environment
+
+--replace base_dir of base.py wuth 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(
+os.path.join(__file__, os.pardir))))
+
+--NB:
+When handling multiple environments, create a base settings file
+and a settings file for each environment. Environment settings files
+should inherit the common settings and override environmentspecific
+settings.
+
+--You will not be able to execute any commands with the manage.
+py tool unless you specify the settings module to use. You will need to add a
+--settings flag when you run management commands from the shell or set a
+DJANGO_SETTINGS_MODULE environment variable
+
+******set DJANGO_SETTINGS_MODULE=educa.settings.pro**********
+
+--If you want to avoid executing this command for each new shell,
+add this command to your shell's configuration in the .bashrc or .bash_profile
+files. If you don't set this variable, you will have to run management commands,
+including the --settings flag, as follows.
+
+********python manage.py shell --settings=educa.settings.pro*******
+
+Using PostgreSQL::
+--Let's create a PostgreSQL user. Open the shell and run the following commands to
+create a database user:
+--educa
+
+******python manage.py migrate --settings=educa.settings.pro*********
+
+*******python manage.py createsuperuser --settings=educa.settings.pro******
+
