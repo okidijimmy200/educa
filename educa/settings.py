@@ -159,3 +159,17 @@ CACHE_MIDDLEWARE_KEY_PREFIX = 'educa'
 
 # channels config
 ASGI_APPLICATION = 'educa.routing.application'
+
+# Channels config
+
+ASGI_APPLICATION = 'educa.routing.application'
+
+CHANNEL_LAYERS = {
+# define a default channel layer using the RedisChannelLayer backend provided by channels-redis and specify the host 127.0.0.1 and the port 6379 on which Redis is running
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)],
+        },
+    },
+}

@@ -1,0 +1,34 @@
+Lecture 1:
+Enabling a channel layer::
+--Channel layers allow you to communicate between different instances of an
+application. A channel layer is the transport mechanism that allows multiple
+consumer instances to communicate with each other and with other parts of Django.
+
+Channels and groups:
+Channel layers provide two abstractions to manage communications: channels
+and groups:
+• Channel: You can think of a channel as an inbox where messages can be
+sent to or as a task queue. Each channel has a name. Messages are sent
+to a channel by anyone who knows the channel name and then given to
+consumers listening on that channel.
+• Group: Multiple channels can be grouped into a group. Each group has
+a name. A channel can be added or removed from a group by anyone
+who knows the group name. Using the group name, you can also send
+a message to all channels in the group.
+
+Setting up a channel layer with Redis:
+--Redis works as the communication store for the channel layer
+
+*********pip install channels-redis==2.4.2**********
+
+--open up the redis server
+
+-To verify that the channel layer can communicate with Redis
+
+>>> import channels.layers
+>>> from asgiref.sync import async_to_sync
+>>> channel_layer = channels.layers.get_channel_layer()
+>>> async_to_sync(channel_layer.send)('test_channel', {'message':'hello'})
+>>> async_to_sync(channel_layer.receive)('test_channel')
+
+
