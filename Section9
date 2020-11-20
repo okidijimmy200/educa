@@ -43,4 +43,13 @@ to_sync() wrapper to use the channel layer asynchronous method.
 >>> async_to_sync(channel_layer.send)('test_channel', {'message':'hello'})
 >>> async_to_sync(channel_layer.receive)('test_channel')
 
+Lecture 2:
+Adding context to the messages:
+--how to display who sent which message and when it was sent
+Modifying the consumer to be fully asynchronous::
+--rewrite the ChatConsumer class to be asynchronous.
+
+Integrating the chat application with existing views:
+--link for students to join the chat room for each course
+
 

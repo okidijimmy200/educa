@@ -4,13 +4,15 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
 from django.utils import timezone
 
-# ChatConsumer consumer. This class inherits from the Channels websocketConsumer class to implement a basic WebSocket consumer
+# The ChatConsumer consumer now inherits from the AsyncWebsocketConsumer class to implement asynchronous calls
 class ChatConsumer(AsyncWebsocketConsumer):
 # connnect(): Called when a new connection is received. You accept any connection with self.accept(). You can also reject a connection by calling self.close().
     async def connect(self):
 # You retrieve the course id from the scope to know the course that the chat room is associated with. You access self.scope['url_route'] ['kwargs ']['course_id'] to retrieve the course_id parameter from
 # the URL. Every consumer has a scope with information about its connection, arguments passed by the URL, and the authenticated user, if any
-        self.user = self.scope['user']
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+# retrieve the current user from the scope with self. scope['user'] and store them in a new user attribute of the consumer
+        self.user = self.scope['user'] 
         self.id = self.scope['url_route']['kwargs']['course_id']
 # You build the group name with the id of the course that the group corresponds to. Remember that you will have a channel group for each
 # course chat room. You store the group name in the room_group_name attribute of the consumer
@@ -39,6 +41,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
+# When the consumer receives a message through the WebSocket, it gets the current time using timezone.now() and passes the current user and datetime in ISO 8601 format along with the message in the event sent to the channel group.
         now = timezone.now()
 
         # send message to room group

@@ -38,12 +38,29 @@ for secure WebSockets, just like https:*/
  chatSocket.onmessage = function(e) {
     var data = JSON.parse(e.data);
     var message = data.message;
-
+/*You now convert the datetime received in the message to a JavaScript Date
+object and format it with a specific locale*/
     var dateOptions = {hour: 'numeric', minute: 'numeric', hour12: true};
     var datetime = new Date(data.datetime).toLocaleString('en', dateOptions);
 
+/*You retrieve the user received in the message and make a comparison
+with two different variables as helpers to identify the user.*/
+////////////////////////////////////////////////////////////////////////////////////
+/*The variable source gets the value me if the user sending the message
+is the current user, or other otherwise. You obtain the username using
+Django's template language with {{ request.user }} to check whether
+the message originated from the current user or another user. You then
+use the source value as a class of the main <div> element to differentiate
+messages sent by the current user from messages sent by others. Different
+CSS styles are applied based on the class attribute*/
+
     var isMe = data.user === '{{ request.user }}';
+/*The variable name gets the value Me if the user sending the message is the
+current user or the name of the user sending the message otherwise. You
+use it to display the name of the user sending the message*/
     var source = isMe ? 'me' : 'other';
+/*You use the username and the datetime in the message that you append
+to the chat log.*/
     var name = isMe ? 'Me' : data.user;
 
     var $chat = $('#chat');
