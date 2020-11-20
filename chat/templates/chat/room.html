@@ -14,11 +14,28 @@ input with a submit button to send text messages to the chat -->
 {% endblock %}
 <!-- to establish a connection with a WebSocket and send or receive messages. -->
 {% block domready %}
-  <!-- var url = 'ws://' + window.location.host +
+/*URL with the WebSocket protocol, which looks like ws:// (or wss://
+for secure WebSockets, just like https:*/
+  var url = 'ws://' + window.location.host +
+  /*build the URL using the current
+  location of the browser, which you obtain from window.location.host.*/
+  /////////////////////////////////////////////////////////////////////////////////
+  /*URL is built with the path for the chat room URL pattern that you defined
+  in the routing.py file of the chat application.*/
             '/ws/chat/room/' + '{{ course.id }}/';
+            /*open a WebSocket connection to the stored URL using new
+            WebSocket(url).*/
   var chatSocket = new WebSocket(url);
 
-  chatSocket.onmessage = function(e) {
+  /*onmessage: Fired when data is received through the WebSocket. You parse
+  the message, which you expect in JSON format, and access its message
+  attribute. You then append a new div element with the message to the
+  HTML element with the chat ID. This will add new messages to the chat log,
+  while keeping all previous messages that have been added to the log. You
+  scroll the chat log div to the bottom to ensure that the new message gets
+  visibility. You achieve this by scrolling to the total scrollable height of the
+  chat log, which can be obtained by accessing its srollHeight attribute.*/
+ chatSocket.onmessage = function(e) {
     var data = JSON.parse(e.data);
     var message = data.message;
 
@@ -38,32 +55,51 @@ input with a submit button to send text messages to the chat -->
     $chat.scrollTop($chat[0].scrollHeight);
   };
 
+  /*onclose: Fired when the connection with the WebSocket is closed. You don't
+  expect to close the connection and therefore you write the error Chat socket
+  closed unexpectedly to the console log if this happens*/
   chatSocket.onclose = function(e) {
     console.error('Chat socket closed unexpectedly');
   };
 
+  /*implement the functionality to send messages to the socket
+  as well*/
+
   var $input = $('#chat-message-input');
   var $submit = $('#chat-message-submit');
-
+/*You read the message entered by the user from the value of the text input
+element with the ID chat-message-input*/
   $submit.click(function() {
     var message = $input.val();
+/*You check whether the message has any content with if(message)*/
     if(message) {
       // send message in JSON format
+  /*If the user has entered a message, you form JSON content such as
+  {'message': 'string entered by the user'} by using JSON.
+  stringify()*/
+  //////////////////////////////////////////////////////////////////////////
+  /*send the JSON content through the WebSocket, calling the send()
+  method of chatSocket client*/
       chatSocket.send(JSON.stringify({'message': message}));
-
+/*clear the contents of the text input by setting its value to an empty
+string with $input.val('')*/
       // clear input
       $input.val('');
-
+/*return the focus to the text input with $input.focus() so that the user
+can write a new message straightaway*/
       // return focus
       $input.focus();
     }
   });
 
+  /*you give the focus to the text input. You also define a function for the
+  keyup() event of the input. For any key that the user presses, you check whether its
+  key code is 13. This is the key code that corresponds to the Enter/Return key.*/
   $input.focus();
   $input.keyup(function(e) {
     if (e.which === 13) {
       // submit with enter / return key
       $submit.click();
-    }
-  }); -->
+    } 
+  });
 {% endblock %}

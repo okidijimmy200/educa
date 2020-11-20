@@ -119,3 +119,26 @@ have implemented. Channels provides routing classes that allow you to combine
 and stack consumers to dispatch based on what the connection is. You can think
 of them as the URL routing system of Django for asynchronous applications.
 
+Lecture 4:
+Implementing the WebSocket client::
+--you
+need to build a WebSocket client to establish a connection with the WebSocket in
+the course chat room template and be able to send/receive messages.
+
+--You write the whole URL instead of building it via its name because Channels does
+not provide a way to reverse URLs. You use the current course id to generate the
+URL for the current course and store the URL in a new variable named url
+
+--The Channels development server listens for incoming socket connections using a
+standard TCP socket. The handshake is the bridge from HTTP to WebSockets. In
+the handshake, details of the connection are negotiated and either party can close
+the connection before completion.
+
+--you are using self.accept()
+to accept any connection in the connect() method of the ChatConsumer class
+implemented in the consumers.py file of the chat application. The connection is
+accepted and therefore you see the WebSocket CONNECT message in the console.
+
+--You will implement the methods to handle common events, such as receiving a
+message and closing the connection.
+
