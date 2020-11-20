@@ -19,6 +19,18 @@ a message to all channels in the group.
 Setting up a channel layer with Redis:
 --Redis works as the communication store for the channel layer
 
+Lecture 2:
+Updating the consumer to broadcast message:
+You will edit the ChatConsumer consumer to use the channel layer. You will use
+a channel group for each course chat room. Therefore, you will use the course id
+to build the group name. ChatConsumer instances will know the group name and
+will be able to communicate with each other
+
+--When you receive a message from the WebSocket connection, instead of sending the
+message to the associated channel, you now send the message to the group. You do
+this by calling the group_send() method of the channel layer. You use the async_
+to_sync() wrapper to use the channel layer asynchronous method.
+
 *********pip install channels-redis==2.4.2**********
 
 --open up the redis server
