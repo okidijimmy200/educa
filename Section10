@@ -62,3 +62,89 @@ create a database user:
 
 *******python manage.py createsuperuser --settings=educa.settings.pro******
 
+Lecture 2:
+Checking your project:
+--Django includes the check management command for checking your project at any
+time. This command inspects the applications installed in your Django project and
+outputs any errors or warnings.
+
+--If you include the --deploy option, additional
+checks only relevant for production use will be triggered.
+
+********python manage.py check --deploy --settings=educa.settings.pro*************
+
+--You will see output with no errors, but several warnings. This means the check was
+successful, but you should go through the warnings to see if there is anything more
+you can do to make your project safe for production.
+
+Serving Django through WSGI::
+--Django's primary deployment platform is WSGI. WSGI stands for Web Server
+Gateway Interface and it is the standard for serving Python applications on the web.
+
+Installing uWSGI::
+--you need a real web server for
+deploying your application in a production environment instead of django development server.
+
+--uWSGI is an extremely fast Python application server. It communicates with your
+Python application using the WSGI specification. uWSGI translates web requests
+into a format that your Django project can process
+
+********pip install uwsgi==2.0.18*******
+
+--uWSGI, you will need a C compiler, such as gcc or clang.
+
+Configuring uWSGI::
+uwsgi --module=educa.wsgi:application \
+--env=DJANGO_SETTINGS_MODULE=educa.settings.pro \
+--master --pidfile=/tmp/project-master.pid \
+--http=127.0.0.1:8000 \
+--uid=1000
+
+--With this command, you can run uWSGI on your localhost with the following
+options:
+• You use the educa.wsgi:application WSGI callable
+• You load the settings for the production environment
+
+
+--You can see the rendered HTML that corresponds to the course list view, but no
+CSS style sheets or images are being loaded. The reason for this is that you didn't
+configure uWSGI to serve static files. You will configure serving static files in the
+production environment later.
+
+--uWSGI allows you to define a custom configuration in a .ini file. This is more
+convenient than passing options through the command line.
+
+--The socket option is intended for communication with some third-party router,
+such as NGINX, while the http option is for uWSGI to accept incoming HTTP
+requests and route them by itself. You are going to run uWSGI using a socket,
+since you are going to configure NGINX as your web server and communicate
+with uWSGI through the socket.
+
+********uwsgi --ini config/uwsgi.ini************
+
+Installing NGINX::
+--When you are serving a website, you have to serve dynamic content, but you also
+need to serve static files, such as CSS style sheets, JavaScript files, and images. While
+uWSGI is capable of serving static files, it adds an unnecessary overhead to HTTP
+requests and therefore, it is encouraged to set up a web server, such as NGINX,
+in front of it.
+--NGINX is a web server focused on high concurrency, performance, and low
+memory usage. NGINX also acts as a reverse proxy, receiving HTTP requests and
+routing them to different backends. As mentioned, generally, you will use a web
+server, such as NGINX, in front of uWSGI for serving static files efficiently and
+quickly, and you will forward dynamic requests to uWSGI workers.
+
+********sudo apt-get install nginx*********
+
+*******sudo nginx*************
+
+****http://127.0.0.1********
+
+--The following will happen when the client browser sends an HTTP request:
+1. NGINX receives the HTTP request
+2. NGINX delegates the request to uWSGI through a socket
+3. uWSGI passes the request to Django for processing
+4. Django returns an HTTP response that is passed back to NGINX, which
+in turn passes it back to the client browser
+
+--Configuring NGINX::

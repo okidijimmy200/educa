@@ -1,0 +1,20 @@
+Lecture 1:
+This is the basic configuration for NGINX. You set up an upstream named educa,
+which points to the socket created by uWSGI. You use the server block and add
+the following configuration:
+• You tell NGINX to listen on port 80.
+• You set the server name to both www.educaproject.com and educaproject.
+com. NGINX will serve incoming requests for both domains.
+• You explicitly set access_log to off. You can use this directive to store
+access logs in a file.
+• You use the error_log directive to set the path to the file where you will
+be storing error logs. Replace this path with the path where you would like
+to store NGINX error logs. Analyze this log file if you run into any issue
+while using NGINX.
+• You include the default uWSGI configuration parameters that come with
+NGINX. These are located next to the default configuration file for NGINX.
+You can usually find them in any of these three locations: /usr/local/
+nginx/conf/usgi_params, /etc/nginx/usgi_params, or /usr/local/etc/
+nginx/usgi_params.
+• You specify that everything under the / path has to be routed to the educa
+socket (uWSGI).

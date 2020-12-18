@@ -11,7 +11,7 @@ ADMINS = (
 
 # ALLOWED_HOSTS: Django will only allow the hosts included in this list to serve the application. This is a security measure. You include the asterisk symbol, *, to refer to all hostnames. You will limit the hostnames that can be used for serving the application later.
 # ALLOWED_HOSTS = ['.educaproject.com']
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['educaproject.com', 'www.educaproject.com']
 
 DATABASES = {
    'default': {
@@ -19,6 +19,7 @@ DATABASES = {
        'NAME': 'educa',
        'USER': 'postgres',
        'PASSWORD': '12345',
+       'HOST': 'localhost'
    }
 }
 
